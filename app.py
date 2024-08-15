@@ -18,16 +18,12 @@ st.title("Data Editor with Streamlit")
 # Creating two tabs: Visualization and Editing
 tab1, tab2 = st.tabs(["Visualización", "Edición"])
 
-if "reload_data" not in st.session_state:
-    st.session_state.reload_data = False
-
 with tab1:
+    # Load the file
+    file_path = "archivo_consolidado 1.xlsx"
+    df = load_excel(file_path)
     st.header("Visualización de Datos")
     
-    # Reload the data if necessary
-    if st.session_state.reload_data:
-        df = load_excel(file_path)
-        st.session_state.reload_data = False  # Reset the reload flag
     
     # Filtering options
     st.sidebar.header("Filter Data")
@@ -54,7 +50,3 @@ with tab2:
         df.update(edited_df)
         save_excel(df, file_path)
         st.success("Cambios guardados exitosamente!")
-        st.session_state.reload_data = True  # Set the flag to reload data in the visualization tab
-
-    st.write("Data preview after editing:")
-    st.dataframe(edited_df, use_container_width=True)
