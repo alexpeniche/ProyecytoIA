@@ -30,6 +30,56 @@ import tensorflow as tf
 from sklearn.metrics import roc_curve, auc, roc_auc_score
 from sklearn.metrics import accuracy_score, confusion_matrix, fbeta_score, classification_report
 #definir funciones
+st.markdown(
+    """
+    <style>
+    .main {
+        background-color: rgb(132, 0, 88);
+        color: white;
+        padding: 20px;
+    }
+
+    h1, h2, h3 {
+        color: white;
+        font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .stTextInput, .stNumberInput, .stSelectbox {
+        font-size: 18px;
+        border: 2px solid #FFFFFF;
+        border-radius: 10px;
+    }
+
+    .stButton button {
+        background-color: #660066;
+        color: white;
+        font-size: 18px;
+        border-radius: 10px;
+        padding: 10px 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    .stButton button:hover {
+        background-color: #990099;
+    }
+
+    .stFileUploader {
+        border: 2px solid #FFFFFF;
+        border-radius: 10px;
+        padding: 10px;
+        background-color: #ffffff;
+        color: black;
+    }
+
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+
+
+
+
 def get_eda(dataset):
     # Distribución de Creditos por Tipo de Casa
     trace0 = go.Bar(
