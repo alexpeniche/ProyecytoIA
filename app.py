@@ -52,6 +52,3 @@ with tab2:
         df.update(edited_df)
         save_excel(df, file_path)
         st.success("Cambios guardados exitosamente!")
-
-    st.write("Data preview after editing:")
-    st.dataframe(edited_df, use_container_width=True)
