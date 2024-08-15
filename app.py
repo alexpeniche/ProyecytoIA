@@ -22,40 +22,21 @@ with tab1:
     # Inicializar el DataFrame filtrado
     df_filtered = df.copy()
 
-    # Límite máximo de filtros
-    max_filters = 5
-    filter_count = 0
+    # Primer filtro
+    selected_field_1 = st.selectbox("Selecciona el primer campo a filtrar:", options=df_filtered.columns, key="field_1")
+    if selected_field_1:
+        unique_values_1 = df_filtered[selected_field_1].dropna().unique()
+        selected_values_1 = st.multiselect(f'Selecciona valores para {selected_field_1}:', options=unique_values_1, key="values_1")
+        if selected_values_1:
+            df_filtered = df_filtered[df_filtered[selected_field_1].isin(selected_values_1)]
 
-    # Bucle para aplicar múltiples filtros con límite de 5
-    while filter_count < max_filters:
-        # Seleccionar el campo a filtrar
-        selected_field = st.selectbox(f"Selecciona el campo a filtrar (Filtro {filter_count + 1}):", options=df_filtered.columns, key=f"field_{filter_count}")
-
-        # Seleccionar valores basados en el campo seleccionado
-        if selected_field:
-            unique_values = df_filtered[selected_field].dropna().unique()  # Obtener valores únicos del campo seleccionado
-            selected_values = st.multiselect(f'Selecciona valores para {selected_field}:', options=unique_values, key=f"values_{filter_count}")
-
-            # Aplicar el filtro al DataFrame basado en los valores seleccionados
-            if selected_values:
-                df_filtered = df_filtered[df_filtered[selected_field].isin(selected_values)]
-
-            # Mostrar el DataFrame filtrado
-            st.dataframe(df_filtered)
-
-        # Incrementar el contador de filtros
-        filter_count += 1
-
-        # Verificar si se ha alcanzado el número máximo de filtros
-        if filter_count >= max_filters:
-            st.warning("Has alcanzado el número máximo de 5 filtros.")
-            break
-
-        # Preguntar si se desea aplicar otro filtro
-        apply_another_filter = st.radio("¿Deseas aplicar otro filtro?", ("Sí", "No"), key=f"radio_{filter_count}")
-
-        if apply_another_filter == "No":
-            break
+    # Segundo filtro (opcional)
+    selected_field_2 = st.selectbox("Selecciona el segundo campo a filtrar (opcional):", options=df_filtered.columns, key="field_2")
+    if selected_field_2:
+        unique_values_2 = df_filtered[selected_field_2].dropna().unique()
+        selected_values_2 = st.multiselect(f'Selecciona valores para {selected_field_2}:', options=unique_values_2, key="values_2")
+        if selected_values_2:
+            df_filtered = df_filtered[df_filtered[selected_field_2].isin(selected_values_2)]
 
     # Mostrar la tabla editable del DataFrame filtrado
     edited_df = st.experimental_data_editor(df_filtered, num_rows="dynamic", use_container_width=True)
@@ -73,21 +54,4 @@ with tab1:
         edited_df = df
 
     # Botón para guardar cambios
-    if st.button("Guardar Cambios"):
-        save_excel(edited_df)
-        st.success("Cambios guardados exitosamente")
-
-    # Mostrar el DataFrame actualizado
-    st.dataframe(edited_df)
-
-with tab2:
-    st.header("Vista de Auditoría")
-    st.write("Aquí puedes agregar contenido relacionado con la auditoría.")
-
-with tab3:
-    st.header("Monitoreo de Servidores")
-    st.write("Aquí puedes agregar contenido relacionado con el monitoreo de servidores.")
-
-with tab4:
-    st.header("Monitoreo de APIs")
-    st.write("Aquí puedes agregar contenido relacionado con el monitoreo de APIs.")
+    if st.button("Guardar Ca
