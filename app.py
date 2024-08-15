@@ -22,9 +22,12 @@ with tab1:
     # Inicializar el DataFrame filtrado
     df_filtered = df.copy()
 
-    # Bucle para aplicar múltiples filtros
+    # Límite máximo de filtros
+    max_filters = 5
     filter_count = 0
-    while True:
+
+    # Bucle para aplicar múltiples filtros con límite de 5
+    while filter_count < max_filters:
         # Seleccionar el campo a filtrar
         selected_field = st.selectbox(f"Selecciona el campo a filtrar (Filtro {filter_count + 1}):", options=df_filtered.columns, key=f"field_{filter_count}")
 
@@ -40,13 +43,19 @@ with tab1:
             # Mostrar el DataFrame filtrado
             st.dataframe(df_filtered)
 
+        # Incrementar el contador de filtros
+        filter_count += 1
+
+        # Verificar si se ha alcanzado el número máximo de filtros
+        if filter_count >= max_filters:
+            st.warning("Has alcanzado el número máximo de 5 filtros.")
+            break
+
         # Preguntar si se desea aplicar otro filtro
         apply_another_filter = st.radio("¿Deseas aplicar otro filtro?", ("Sí", "No"), key=f"radio_{filter_count}")
 
         if apply_another_filter == "No":
             break
-
-        filter_count += 1
 
     # Mostrar la tabla editable del DataFrame filtrado
     edited_df = st.experimental_data_editor(df_filtered, num_rows="dynamic", use_container_width=True)
