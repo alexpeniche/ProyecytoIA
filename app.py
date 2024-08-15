@@ -643,15 +643,15 @@ st.markdown(
     <style>
     /* Estilo principal */
     .main {
-        background-color: rgb(132, 0, 88);
-        color: white;
+        background-color: #800080; /* Color de fondo morado */
+        color: white; /* Color de texto blanco */
         padding: 20px;
         font-family: 'Helvetica Neue', sans-serif;
     }
 
     /* Estilo de los títulos */
     h1, h2, h3 {
-        color: white;
+        color: white; /* Color de texto blanco */
         font-weight: 700;
         text-align: center;
         margin-bottom: 20px;
@@ -661,22 +661,23 @@ st.markdown(
     /* Estilo de los inputs */
     .stTextInput, .stNumberInput, .stSelectbox, .stFileUploader {
         font-size: 16px;
-        border: 2px solid #FFFFFF;
+        border: 2px solid #FFFFFF; /* Borde blanco */
         border-radius: 10px;
         padding: 10px;
         margin-bottom: 20px;
         transition: box-shadow 0.3s ease;
+        color: black; /* Color del texto interno del input */
     }
 
     /* Hover effect para inputs */
     .stTextInput:hover, .stNumberInput:hover, .stSelectbox:hover, .stFileUploader:hover {
-        box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.5);
+        box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.5); /* Sombra blanca */
     }
 
     /* Estilo de los botones */
     .stButton button {
-        background-color: #660066;
-        color: white;
+        background-color: #660066; /* Color de fondo del botón */
+        color: white; /* Color del texto del botón */
         font-size: 18px;
         border-radius: 10px;
         padding: 10px 20px;
@@ -689,14 +690,14 @@ st.markdown(
 
     /* Hover effect para botones */
     .stButton button:hover {
-        background-color: #990099;
+        background-color: #990099; /* Color de fondo del botón al pasar el ratón */
         transform: scale(1.05);
     }
 
     /* Estilo para el File Uploader */
     .stFileUploader {
-        background-color: #ffffff;
-        color: #000000;
+        background-color: #ffffff; /* Color de fondo del uploader */
+        color: black; /* Color del texto del uploader */
     }
 
     /* Animación para los títulos */
