@@ -56,11 +56,10 @@ with tab1:
             st.subheader("Editar un registro existente")
             row_to_edit = st.number_input("Número de fila para editar", min_value=0, max_value=len(df) - 1, step=1)
             
-            # Vista previa de los datos de la fila seleccionada
-            if row_to_edit is not None:
-                with col2:
-                    st.subheader(f"Vista previa de la fila {row_to_edit}")
-                    st.write(df.iloc[row_to_edit])
+            # Vista previa de los datos de la fila seleccionada en formato horizontal
+            with col2:
+                st.subheader(f"Vista previa de la fila {row_to_edit}")
+                st.write(df.iloc[row_to_edit].to_frame().T)
 
             if st.button("Cargar fila para edición"):
                 row_data = df.iloc[row_to_edit]
@@ -75,7 +74,8 @@ with tab1:
                     df.loc[row_to_edit, :] = pd.Series(edited_record)
                     save_excel(df)
                     st.success("Registro actualizado exitosamente")
-                    df_filtered = df  # Mostrar el DataFrame completo
+                    with col2:
+                        st.write(df.iloc[row_to_edit].to_frame().T)  # Actualizar la vista previa
 
         # Sección de Agregar
         elif action == "Agregar":
@@ -98,11 +98,10 @@ with tab1:
             st.subheader("Eliminar un registro")
             row_to_delete = st.number_input("Número de fila para eliminar", min_value=0, max_value=len(df) - 1, step=1)
             
-            # Vista previa de los datos de la fila seleccionada
-            if row_to_delete is not None:
-                with col2:
-                    st.subheader(f"Vista previa de la fila {row_to_delete}")
-                    st.write(df.iloc[row_to_delete])
+            # Vista previa de los datos de la fila seleccionada en formato horizontal
+            with col2:
+                st.subheader(f"Vista previa de la fila {row_to_delete}")
+                st.write(df.iloc[row_to_delete].to_frame().T)
 
             if st.button("Eliminar Fila"):
                 df = df.drop(row_to_delete).reset_index(drop=True)
