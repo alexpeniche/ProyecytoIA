@@ -3,6 +3,13 @@ import streamlit as st
 st.title("Credit Card App Aavila")
 
 import streamlit as st
+# Definir las opciones de página
+pages = ["Cargar Datos"]
+
+# Mostrar un menú para seleccionar la página
+selected_page = st.sidebar.multiselect("Seleccione una página", pages)
+
+
 
 # Custom CSS for colors and animations
 st.markdown(
@@ -121,7 +128,6 @@ st.write("Slider value range:", slider_value)
 # File uploader at the bottom
 st.header("File Upload")
 uploaded_file = st.file_uploader("Choose a file")
-
 if uploaded_file is not None:
     st.success(f"File uploaded: {uploaded_file.name}")
     st.write("File contents:", uploaded_file.getvalue())
