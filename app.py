@@ -19,79 +19,86 @@ tab1, tab2, tab3, tab4 = st.tabs(["Operaciones", "Auditoría", "Monitoreo Servid
 with tab1:
     st.header("Vista de Operaciones")
 
-    # Botones para seleccionar la acción
-    action = st.radio("Selecciona una acción:", ["Vista (y Filtrado)", "Edición", "Agregar", "Eliminar"])
+    # Dividir la pantalla en dos columnas
+    col1, col2 = st.columns([1, 3])
 
-    # Sección de Vista (y Filtrado)
-    if action == "Vista (y Filtrado)":
-        st.subheader("Vista y Filtrado de Datos")
+    with col1:
+        st.subheader("Filtros")
 
-        # Filtrado de datos
-        df_filtered = df.copy()
+        # Botones para seleccionar la acción
+        action = st.radio("Selecciona una acción:", ["Vista (y Filtrado)", "Edición", "Agregar", "Eliminar"])
 
-        # Primer filtro
-        selected_field_1 = st.selectbox("Selecciona el primer campo a filtrar:", options=df_filtered.columns, key="field_1")
-        if selected_field_1:
-            unique_values_1 = df_filtered[selected_field_1].dropna().unique()
-            selected_values_1 = st.multiselect(f'Selecciona valores para {selected_field_1}:', options=unique_values_1, key="values_1")
-            if selected_values_1:
-                df_filtered = df_filtered[df_filtered[selected_field_1].isin(selected_values_1)]
+        # Sección de Vista (y Filtrado)
+        if action == "Vista (y Filtrado)":
+            st.subheader("Vista y Filtrado de Datos")
 
-        # Segundo filtro (opcional)
-        selected_field_2 = st.selectbox("Selecciona el segundo campo a filtrar (opcional):", options=df_filtered.columns, key="field_2")
-        if selected_field_2:
-            unique_values_2 = df_filtered[selected_field_2].dropna().unique()
-            selected_values_2 = st.multiselect(f'Selecciona valores para {selected_field_2}:', options=unique_values_2, key="values_2")
-            if selected_values_2:
-                df_filtered = df_filtered[df_filtered[selected_field_2].isin(selected_values_2)]
+            # Filtrado de datos
+            df_filtered = df.copy()
 
-        # Mostrar los datos filtrados
-        st.dataframe(df_filtered)
+            # Primer filtro
+            selected_field_1 = st.selectbox("Selecciona el primer campo a filtrar:", options=df_filtered.columns, key="field_1")
+            if selected_field_1:
+                unique_values_1 = df_filtered[selected_field_1].dropna().unique()
+                selected_values_1 = st.multiselect(f'Selecciona valores para {selected_field_1}:', options=unique_values_1, key="values_1")
+                if selected_values_1:
+                    df_filtered = df_filtered[df_filtered[selected_field_1].isin(selected_values_1)]
 
-    # Sección de Edición
-    elif action == "Edición":
-        st.subheader("Editar un registro existente")
-        row_to_edit = st.number_input("Número de fila para editar", min_value=0, max_value=len(df) - 1, step=1)
-        if st.button("Cargar fila para edición"):
-            row_data = df.iloc[row_to_edit]
-            with st.form(key='edit_record'):
-                edited_record = {}
+            # Segundo filtro (opcional)
+            selected_field_2 = st.selectbox("Selecciona el segundo campo a filtrar (opcional):", options=df_filtered.columns, key="field_2")
+            if selected_field_2:
+                unique_values_2 = df_filtered[selected_field_2].dropna().unique()
+                selected_values_2 = st.multiselect(f'Selecciona valores para {selected_field_2}:', options=unique_values_2, key="values_2")
+                if selected_values_2:
+                    df_filtered = df_filtered[df_filtered[selected_field_2].isin(selected_values_2)]
+
+        # Sección de Edición
+        elif action == "Edición":
+            st.subheader("Editar un registro existente")
+            row_to_edit = st.number_input("Número de fila para editar", min_value=0, max_value=len(df) - 1, step=1)
+            if st.button("Cargar fila para edición"):
+                row_data = df.iloc[row_to_edit]
+                with st.form(key='edit_record'):
+                    edited_record = {}
+                    for col in df.columns:
+                        edited_record[col] = st.text_input(f'Nuevo valor para {col}', value=row_data[col])
+
+                    update_button = st.form_submit_button(label='Actualizar registro')
+
+                if update_button:
+                    df.loc[row_to_edit, :] = pd.Series(edited_record)
+                    save_excel(df)
+                    st.success("Registro actualizado exitosamente")
+                    df_filtered = df  # Mostrar el DataFrame completo
+
+        # Sección de Agregar
+        elif action == "Agregar":
+            st.subheader("Agregar un nuevo registro")
+            with st.form(key='add_record'):
+                new_record = {}
                 for col in df.columns:
-                    edited_record[col] = st.text_input(f'Nuevo valor para {col}', value=row_data[col])
+                    new_record[col] = st.text_input(f'Nuevo valor para {col}')
 
-                update_button = st.form_submit_button(label='Actualizar registro')
+                submit_button = st.form_submit_button(label='Agregar registro')
 
-            if update_button:
-                df.loc[row_to_edit, :] = pd.Series(edited_record)
+            if submit_button:
+                df = df.append(new_record, ignore_index=True)
                 save_excel(df)
-                st.success("Registro actualizado exitosamente")
-                st.dataframe(df)
+                st.success("Registro agregado exitosamente")
+                df_filtered = df  # Mostrar el DataFrame completo
 
-    # Sección de Agregar
-    elif action == "Agregar":
-        st.subheader("Agregar un nuevo registro")
-        with st.form(key='add_record'):
-            new_record = {}
-            for col in df.columns:
-                new_record[col] = st.text_input(f'Nuevo valor para {col}')
+        # Sección de Eliminar
+        elif action == "Eliminar":
+            st.subheader("Eliminar un registro")
+            row_to_delete = st.number_input("Número de fila para eliminar", min_value=0, max_value=len(df) - 1, step=1)
+            if st.button("Eliminar Fila"):
+                df = df.drop(row_to_delete).reset_index(drop=True)
+                save_excel(df)
+                st.success("Registro eliminado exitosamente")
+                df_filtered = df  # Mostrar el DataFrame completo
 
-            submit_button = st.form_submit_button(label='Agregar registro')
-
-        if submit_button:
-            df = df.append(new_record, ignore_index=True)
-            save_excel(df)
-            st.success("Registro agregado exitosamente")
-            st.dataframe(df)
-
-    # Sección de Eliminar
-    elif action == "Eliminar":
-        st.subheader("Eliminar un registro")
-        row_to_delete = st.number_input("Número de fila para eliminar", min_value=0, max_value=len(df) - 1, step=1)
-        if st.button("Eliminar Fila"):
-            df = df.drop(row_to_delete).reset_index(drop=True)
-            save_excel(df)
-            st.success("Registro eliminado exitosamente")
-            st.dataframe(df)
+    with col2:
+        st.subheader("Datos")
+        st.dataframe(df_filtered)
 
 with tab2:
     st.header("Vista de Auditoría")
