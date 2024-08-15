@@ -13,31 +13,35 @@ with tab1:
     # Crear una copia del DataFrame original para aplicar filtros de manera acumulativa
     df_filtered = df.copy()
 
-    # Bucle para permitir múltiples filtros
-    filter_count = 0
-    while True:
-        # Seleccionar el campo a filtrar
-        selected_field = st.selectbox(f"Selecciona el campo a filtrar (Filtro {filter_count + 1}):", options=df_filtered.columns, key=f"field_{filter_count}")
+    # Paso 1: Seleccionar el campo a filtrar
+    selected_field = st.selectbox("Selecciona el campo a filtrar:", options=df_filtered.columns)
 
-        # Seleccionar valores basados en el campo seleccionado
-        if selected_field:
-            unique_values = df_filtered[selected_field].dropna().unique()  # Obtener valores únicos del campo seleccionado
-            selected_values = st.multiselect(f'Selecciona valores para {selected_field}:', options=unique_values, key=f"values_{filter_count}")
+    # Paso 2: Seleccionar valores basados en el campo seleccionado
+    if selected_field:
+        unique_values = df_filtered[selected_field].dropna().unique()  # Obtener valores únicos del campo seleccionado
+        selected_values = st.multiselect(f'Selecciona valores para {selected_field}:', options=unique_values)
 
-            # Aplicar el filtro al DataFrame basado en los valores seleccionados
-            if selected_values:
-                df_filtered = df_filtered[df_filtered[selected_field].isin(selected_values)]
+        # Aplicar el filtro al DataFrame basado en los valores seleccionados
+        if selected_values:
+            df_filtered = df_filtered[df_filtered[selected_field].isin(selected_values)]
 
-            # Mostrar el DataFrame filtrado
+    # Mostrar el DataFrame filtrado
+    st.dataframe(df_filtered)
+
+    # Agregar opción para filtrar nuevamente sobre el DataFrame ya filtrado
+    if not df_filtered.empty:
+        update_filter = st.checkbox("¿Quieres aplicar otro filtro?", value=False)
+        if update_filter:
+            selected_field_2 = st.selectbox("Selecciona el siguiente campo a filtrar:", options=df_filtered.columns)
+            if selected_field_2:
+                unique_values_2 = df_filtered[selected_field_2].dropna().unique()
+                selected_values_2 = st.multiselect(f'Selecciona valores para {selected_field_2}:', options=unique_values_2)
+
+                if selected_values_2:
+                    df_filtered = df_filtered[df_filtered[selected_field_2].isin(selected_values_2)]
+
+            # Mostrar el DataFrame nuevamente después de aplicar el segundo filtro
             st.dataframe(df_filtered)
-
-        # Preguntar si se desea aplicar otro filtro
-        apply_another_filter = st.radio("¿Deseas aplicar otro filtro?", ("Sí", "No"), key=f"radio_{filter_count}")
-
-        if apply_another_filter == "No":
-            break
-
-        filter_count += 1
 
 with tab2:
     st.header("Vista de Auditoría")
