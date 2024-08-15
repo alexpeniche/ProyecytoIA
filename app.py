@@ -9,21 +9,19 @@ def load_excel(file_path):
 def save_excel(df, file_path):
     df.to_excel(file_path, index=False)
 
-# Load the file
+# Load the file path
 file_path = "archivo_consolidado 1.xlsx"
-df = load_excel(file_path)
 
-st.title("Data Editor with Streamlit")
-
-# Creating two tabs: Visualization and Editing
+# Create two tabs: Visualization and Editing
 tab1, tab2 = st.tabs(["Visualización", "Edición"])
 
 with tab1:
-    # Load the file
-    file_path = "archivo_consolidado 1.xlsx"
-    df = load_excel(file_path)
     st.header("Visualización de Datos")
-    
+
+    # Button to refresh the data
+    if st.button("Actualizar Vista"):
+        df = load_excel(file_path)
+        st.success("Datos actualizados correctamente!")
     
     # Filtering options
     st.sidebar.header("Filter Data")
