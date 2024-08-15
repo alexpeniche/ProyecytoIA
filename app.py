@@ -643,7 +643,7 @@ st.markdown(
     <style>
     /* Estilo principal */
     .main {
-        background-color: #800080; /* Color de fondo morado */
+        background-color: rgb(132, 0, 88); /* Color de fondo morado */
         color: white; /* Color de texto blanco */
         padding: 20px;
         font-family: 'Helvetica Neue', sans-serif;
@@ -659,19 +659,25 @@ st.markdown(
     }
 
     /* Estilo de los inputs */
-    .stTextInput, .stNumberInput, .stSelectbox, .stFileUploader {
-        font-size: 16px;
+    .stTextInput input, .stNumberInput input, .stSelectbox select, .stFileUploader label {
+        background-color: rgb(255, 255, 255, 0.2); /* Fondo ligeramente transparente */
+        color: white; /* Color de texto blanco */
         border: 2px solid #FFFFFF; /* Borde blanco */
         border-radius: 10px;
         padding: 10px;
         margin-bottom: 20px;
         transition: box-shadow 0.3s ease;
-        color: black; /* Color del texto interno del input */
     }
 
     /* Hover effect para inputs */
-    .stTextInput:hover, .stNumberInput:hover, .stSelectbox:hover, .stFileUploader:hover {
+    .stTextInput input:hover, .stNumberInput input:hover, .stSelectbox select:hover, .stFileUploader label:hover {
         box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.5); /* Sombra blanca */
+    }
+
+    /* Placeholder color */
+    ::placeholder {
+        color: #CCCCCC; /* Color gris claro para los placeholders */
+        opacity: 1; /* Mantener opacidad completa */
     }
 
     /* Estilo de los botones */
@@ -696,8 +702,8 @@ st.markdown(
 
     /* Estilo para el File Uploader */
     .stFileUploader {
-        background-color: #ffffff; /* Color de fondo del uploader */
-        color: black; /* Color del texto del uploader */
+        background-color: rgba(255, 255, 255, 0.2); /* Fondo ligeramente transparente */
+        color: white; /* Color del texto del uploader */
     }
 
     /* Animación para los títulos */
