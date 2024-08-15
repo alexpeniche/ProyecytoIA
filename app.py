@@ -53,21 +53,15 @@ with tab1:
 
     with col2:
         if action == "Edición":
-            st.subheader("Editar registros")
+            st.subheader("Editar directamente en la tabla")
 
-            for index, row in df_filtered.iterrows():
-                with st.form(key=f'form_{index}'):
-                    st.write(f"**Editando fila {index}**")
-                    edited_record = {}
-                    for col in df.columns:
-                        edited_record[col] = st.text_input(f'{col}', value=row[col])
+            # Edición directa en la tabla (experimental)
+            edited_df = st.experimental_data_editor(df_filtered)
 
-                    update_button = st.form_submit_button(label='Actualizar registro')
-
-                    if update_button:
-                        df.loc[index, :] = pd.Series(edited_record)
-                        save_excel(df)
-                        st.success(f"Registro en fila {index} actualizado exitosamente")
+            if st.button("Guardar cambios"):
+                df.update(edited_df)  # Actualizar el DataFrame original con los cambios
+                save_excel(df)
+                st.success("Cambios guardados exitosamente")
 
         elif action == "Agregar":
             st.subheader("Agregar un nuevo registro")
