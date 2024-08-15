@@ -676,7 +676,7 @@ st.markdown(
 
     /* Placeholder color */
     ::placeholder {
-        color: #CCCCCC; /* Color gris claro para los placeholders */
+        color: white; /* Color gris claro para los placeholders */
         opacity: 1; /* Mantener opacidad completa */
     }
 
