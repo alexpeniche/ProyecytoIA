@@ -56,7 +56,7 @@ with tab1:
             st.subheader("Editar directamente en la tabla")
 
             # Edición directa en la tabla (experimental)
-            edited_df = st.experimental_data_editor(df_filtered)
+            edited_df = st.data_editor(df_filtered)
 
             if st.button("Guardar cambios"):
                 df.update(edited_df)  # Actualizar el DataFrame original con los cambios
