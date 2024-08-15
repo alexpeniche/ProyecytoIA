@@ -54,4 +54,21 @@ with tab1:
         edited_df = df
 
     # Botón para guardar cambios
-    if st.button("Guardar Ca
+    if st.button("Guardar Cambios"):
+        save_excel(edited_df)
+        st.success("Cambios guardados exitosamente")
+
+    # Mostrar el DataFrame actualizado
+    st.dataframe(edited_df)
+
+with tab2:
+    st.header("Vista de Auditoría")
+    st.write("Aquí puedes agregar contenido relacionado con la auditoría.")
+
+with tab3:
+    st.header("Monitoreo de Servidores")
+    st.write("Aquí puedes agregar contenido relacionado con el monitoreo de servidores.")
+
+with tab4:
+    st.header("Monitoreo de APIs")
+    st.write("Aquí puedes agregar contenido relacionado con el monitoreo de APIs.")
