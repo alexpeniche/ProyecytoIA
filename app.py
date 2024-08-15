@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 
@@ -10,19 +9,22 @@ tab1, tab2, tab3, tab4 = st.tabs(["Operaciones", "Auditoría", "Monitoreo Servid
 
 with tab1:
     st.header("Vista de Operaciones")
-    
-    # Crear filtros para cada columna del DataFrame
-    filters = {}
-    for col in df.columns:
-        unique_values = df[col].dropna().unique()  # Valores únicos, excluyendo NaN
-        selected_values = st.multiselect(f'Selecciona valores para {col}:', options=unique_values)
-        if selected_values:
-            filters[col] = selected_values
 
-    # Aplicar los filtros al DataFrame
-    df_filtered = df.copy()
-    for col, selected_values in filters.items():
-        df_filtered = df_filtered[df_filtered[col].isin(selected_values)]
+    # Paso 1: Seleccionar el campo a filtrar
+    selected_field = st.selectbox("Selecciona el campo a filtrar:", options=df.columns)
+
+    # Paso 2: Seleccionar valores basados en el campo seleccionado
+    if selected_field:
+        unique_values = df[selected_field].dropna().unique()  # Obtener valores únicos del campo seleccionado
+        selected_values = st.multiselect(f'Selecciona valores para {selected_field}:', options=unique_values)
+
+        # Aplicar el filtro al DataFrame basado en los valores seleccionados
+        if selected_values:
+            df_filtered = df[df[selected_field].isin(selected_values)]
+        else:
+            df_filtered = df
+    else:
+        df_filtered = df
 
     # Mostrar el DataFrame filtrado
     st.dataframe(df_filtered)
