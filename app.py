@@ -22,17 +22,14 @@ filtered_df = df.copy()
 
 for column in columns:
     unique_values = filtered_df[column].unique()
-    selected_values = st.sidebar.multiselect(f"Filter by {column}:", options=unique_values, default=unique_values)
+    selected_values = st.sidebar.multiselect(f"Filter by {column}:", options=unique_values)
     filtered_df = filtered_df[filtered_df[column].isin(selected_values)]
 
 # Data editor
-st.header("Edit Data")
+st.header("Data Editor")
 edited_df = st.data_editor(filtered_df, num_rows="dynamic", use_container_width=True)
 
 # Button to save changes
 if st.button("Save Changes"):
     save_excel(edited_df, file_path)
     st.success("Changes saved successfully!")
-
-st.write("Data preview:")
-st.dataframe(edited_df)
