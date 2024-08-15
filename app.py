@@ -13,7 +13,7 @@ def save_excel(df, file_path):
 file_path = "archivo_consolidado 1.xlsx"
 df = load_excel(file_path)
 
-st.title("Data Editor with Streamlit")
+st.title("Monitoreo de Operaciones")
 
 # Creating two tabs: Visualization and Editing
 tab1, tab2 = st.tabs(["Visualización", "Edición"])
