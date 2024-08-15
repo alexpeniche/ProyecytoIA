@@ -55,6 +55,13 @@ with tab1:
         elif action == "Edición":
             st.subheader("Editar un registro existente")
             row_to_edit = st.number_input("Número de fila para editar", min_value=0, max_value=len(df) - 1, step=1)
+            
+            # Vista previa de los datos de la fila seleccionada
+            if row_to_edit is not None:
+                with col2:
+                    st.subheader(f"Vista previa de la fila {row_to_edit}")
+                    st.write(df.iloc[row_to_edit])
+
             if st.button("Cargar fila para edición"):
                 row_data = df.iloc[row_to_edit]
                 with st.form(key='edit_record'):
@@ -86,10 +93,17 @@ with tab1:
                 st.success("Registro agregado exitosamente")
                 df_filtered = df  # Mostrar el DataFrame completo
 
-        # Sección de Eliminar
+        # Sección de Eliminación
         elif action == "Eliminar":
             st.subheader("Eliminar un registro")
             row_to_delete = st.number_input("Número de fila para eliminar", min_value=0, max_value=len(df) - 1, step=1)
+            
+            # Vista previa de los datos de la fila seleccionada
+            if row_to_delete is not None:
+                with col2:
+                    st.subheader(f"Vista previa de la fila {row_to_delete}")
+                    st.write(df.iloc[row_to_delete])
+
             if st.button("Eliminar Fila"):
                 df = df.drop(row_to_delete).reset_index(drop=True)
                 save_excel(df)
@@ -97,8 +111,9 @@ with tab1:
                 df_filtered = df  # Mostrar el DataFrame completo
 
     with col2:
-        st.subheader("Datos")
-        st.dataframe(df_filtered)
+        if action == "Vista (y Filtrado)":
+            st.subheader("Datos Filtrados")
+            st.dataframe(df_filtered)
 
 with tab2:
     st.header("Vista de Auditoría")
