@@ -19,7 +19,7 @@ tab1, tab2, tab3, tab4 = st.tabs(["Operaciones", "Auditoría", "Monitoreo Servid
 with tab1:
     st.header("Vista de Operaciones")
 
-    # Dividir la pantalla en dos columnas, con más espacio para la vista previa
+    # Dividir la pantalla en dos columnas, con más espacio para la tabla y edición
     col1, col2 = st.columns([1, 4])
 
     with col1:
@@ -51,33 +51,24 @@ with tab1:
                 if selected_values_2:
                     df_filtered = df_filtered[df_filtered[selected_field_2].isin(selected_values_2)]
 
-        # Sección de Edición
-        elif action == "Edición":
-            st.subheader("Editar un registro existente")
-            row_to_edit = st.number_input("Número de fila para editar", min_value=0, max_value=len(df) - 1, step=1)
-            
-            # Vista previa de los datos de la fila seleccionada en formato horizontal
-            with col2:
-                st.subheader(f"Vista previa de la fila {row_to_edit}")
-                st.write(df.iloc[row_to_edit].to_frame().T)
+    with col2:
+        if action == "Edición":
+            st.subheader("Editar registros")
 
-            if st.button("Cargar fila para edición"):
-                row_data = df.iloc[row_to_edit]
-                with st.form(key='edit_record'):
+            for index, row in df_filtered.iterrows():
+                with st.form(key=f'form_{index}'):
+                    st.write(f"**Editando fila {index}**")
                     edited_record = {}
                     for col in df.columns:
-                        edited_record[col] = st.text_input(f'Nuevo valor para {col}', value=row_data[col])
+                        edited_record[col] = st.text_input(f'{col}', value=row[col])
 
                     update_button = st.form_submit_button(label='Actualizar registro')
 
-                if update_button:
-                    df.loc[row_to_edit, :] = pd.Series(edited_record)
-                    save_excel(df)
-                    st.success("Registro actualizado exitosamente")
-                    with col2:
-                        st.write(df.iloc[row_to_edit].to_frame().T)  # Actualizar la vista previa
+                    if update_button:
+                        df.loc[index, :] = pd.Series(edited_record)
+                        save_excel(df)
+                        st.success(f"Registro en fila {index} actualizado exitosamente")
 
-        # Sección de Agregar
         elif action == "Agregar":
             st.subheader("Agregar un nuevo registro")
             with st.form(key='add_record'):
@@ -93,13 +84,12 @@ with tab1:
                 st.success("Registro agregado exitosamente")
                 df_filtered = df  # Mostrar el DataFrame completo
 
-        # Sección de Eliminación
         elif action == "Eliminar":
             st.subheader("Eliminar un registro")
             row_to_delete = st.number_input("Número de fila para eliminar", min_value=0, max_value=len(df) - 1, step=1)
             
-            # Vista previa de los datos de la fila seleccionada en formato horizontal
-            with col2:
+            if row_to_delete is not None:
+                # Vista previa de los datos de la fila seleccionada en formato horizontal
                 st.subheader(f"Vista previa de la fila {row_to_delete}")
                 st.write(df.iloc[row_to_delete].to_frame().T)
 
@@ -109,7 +99,6 @@ with tab1:
                 st.success("Registro eliminado exitosamente")
                 df_filtered = df  # Mostrar el DataFrame completo
 
-    with col2:
         if action == "Vista (y Filtrado)":
             st.subheader("Datos Filtrados")
             st.dataframe(df_filtered, width=1000)  # Dar más espacio al DataFrame
