@@ -9,20 +9,24 @@ def load_excel(file_path):
 def save_excel(df, file_path):
     df.to_excel(file_path, index=False)
 
-# Load the file path
+# Load the file
 file_path = "archivo_consolidado 1.xlsx"
+df = load_excel(file_path)
 
-# Create two tabs: Visualization and Editing
+st.title("Data Editor with Streamlit")
+
+# Creating two tabs: Visualization and Editing
 tab1, tab2 = st.tabs(["Visualización", "Edición"])
 
 with tab1:
+
     st.header("Visualización de Datos")
 
-    # Button to refresh the data
     if st.button("Actualizar Vista"):
         df = load_excel(file_path)
         st.success("Datos actualizados correctamente!")
     
+        
     # Filtering options
     st.sidebar.header("Filter Data")
     columns = st.sidebar.multiselect("Select columns to filter by:", options=df.columns)
@@ -48,3 +52,6 @@ with tab2:
         df.update(edited_df)
         save_excel(df, file_path)
         st.success("Cambios guardados exitosamente!")
+
+    st.write("Data preview after editing:")
+    st.dataframe(edited_df, use_container_width=True)
