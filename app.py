@@ -19,8 +19,8 @@ tab1, tab2, tab3, tab4 = st.tabs(["Operaciones", "Auditoría", "Monitoreo Servid
 with tab1:
     st.header("Vista de Operaciones")
 
-    # Dividir la pantalla en dos columnas
-    col1, col2 = st.columns([1, 3])
+    # Dividir la pantalla en dos columnas, con más espacio para la vista previa
+    col1, col2 = st.columns([1, 4])
 
     with col1:
         st.subheader("Filtros")
@@ -112,7 +112,7 @@ with tab1:
     with col2:
         if action == "Vista (y Filtrado)":
             st.subheader("Datos Filtrados")
-            st.dataframe(df_filtered)
+            st.dataframe(df_filtered, width=1000)  # Dar más espacio al DataFrame
 
 with tab2:
     st.header("Vista de Auditoría")
