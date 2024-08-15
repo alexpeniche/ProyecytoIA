@@ -651,7 +651,7 @@ st.markdown(
 
     /* Estilo de los títulos */
     h1, h2, h3 {
-        color: #ffffff;
+        color: white;
         font-weight: 700;
         text-align: center;
         margin-bottom: 20px;
