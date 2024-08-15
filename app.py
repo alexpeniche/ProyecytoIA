@@ -1,8 +1,17 @@
 import streamlit as st
 import pandas as pd
 
+# Función para cargar el archivo Excel desde SharePoint (simulada aquí)
+def load_excel():
+    df = pd.read_excel('archivo_consolidado 1.xlsx')
+    return df
+
+# Función para guardar el archivo Excel de vuelta en SharePoint (simulada aquí)
+def save_excel(df):
+    df.to_excel('archivo_consolidado 1.xlsx', index=False)
+
 # Cargar el archivo Excel
-df = pd.read_excel('archivo_consolidado 1.xlsx')
+df = load_excel()
 
 # Crear pestañas
 tab1, tab2, tab3, tab4 = st.tabs(["Operaciones", "Auditoría", "Monitoreo Servidores", "APIs"])
@@ -10,38 +19,28 @@ tab1, tab2, tab3, tab4 = st.tabs(["Operaciones", "Auditoría", "Monitoreo Servid
 with tab1:
     st.header("Vista de Operaciones")
 
-    # Crear una copia del DataFrame original para aplicar filtros de manera acumulativa
-    df_filtered = df.copy()
+    # Mostrar la tabla editable
+    edited_df = st.experimental_data_editor(df, num_rows="dynamic", use_container_width=True)
 
-    # Paso 1: Seleccionar el campo a filtrar
-    selected_field = st.selectbox("Selecciona el campo a filtrar:", options=df_filtered.columns)
+    # Botones para agregar o eliminar filas
+    if st.button("Agregar Fila"):
+        new_row = {col: "" for col in df.columns}
+        df = df.append(new_row, ignore_index=True)
+        edited_df = df
 
-    # Paso 2: Seleccionar valores basados en el campo seleccionado
-    if selected_field:
-        unique_values = df_filtered[selected_field].dropna().unique()  # Obtener valores únicos del campo seleccionado
-        selected_values = st.multiselect(f'Selecciona valores para {selected_field}:', options=unique_values)
+    # Selección de fila para eliminar
+    row_to_delete = st.number_input("Número de fila para eliminar", min_value=0, max_value=len(edited_df) - 1, step=1)
+    if st.button("Eliminar Fila"):
+        df = edited_df.drop(row_to_delete).reset_index(drop=True)
+        edited_df = df
 
-        # Aplicar el filtro al DataFrame basado en los valores seleccionados
-        if selected_values:
-            df_filtered = df_filtered[df_filtered[selected_field].isin(selected_values)]
+    # Botón para guardar cambios
+    if st.button("Guardar Cambios"):
+        save_excel(edited_df)
+        st.success("Cambios guardados exitosamente")
 
-    # Mostrar el DataFrame filtrado
-    st.dataframe(df_filtered)
-
-    # Agregar opción para filtrar nuevamente sobre el DataFrame ya filtrado
-    if not df_filtered.empty:
-        update_filter = st.checkbox("¿Quieres aplicar otro filtro?", value=False)
-        if update_filter:
-            selected_field_2 = st.selectbox("Selecciona el siguiente campo a filtrar:", options=df_filtered.columns)
-            if selected_field_2:
-                unique_values_2 = df_filtered[selected_field_2].dropna().unique()
-                selected_values_2 = st.multiselect(f'Selecciona valores para {selected_field_2}:', options=unique_values_2)
-
-                if selected_values_2:
-                    df_filtered = df_filtered[df_filtered[selected_field_2].isin(selected_values_2)]
-
-            # Mostrar el DataFrame nuevamente después de aplicar el segundo filtro
-            st.dataframe(df_filtered)
+    # Mostrar el DataFrame actualizado
+    st.dataframe(edited_df)
 
 with tab2:
     st.header("Vista de Auditoría")
