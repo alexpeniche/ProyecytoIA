@@ -2,25 +2,83 @@ import streamlit as st
 #writing simple text
 st.title("Credit Card App Aavila")
 
+import streamlit as st
 
-
-
-# Custom CSS for styling
+# Custom CSS for colors and animations
 st.markdown(
     """
     <style>
+    /* Background color for the main content */
     .main {
-        background-color: #f0f2f6;
+        background-color: #e0f7fa;
         padding: 20px;
     }
-    .stButton button {
-        background-color: #ff4b4b;
-        color: white;
-        border: None;
+
+    /* Title styling */
+    h1 {
+        color: #00695c;
+        text-align: center;
+        font-family: 'Helvetica Neue', sans-serif;
     }
-    .stButton button:hover {
-        background-color: #ff0000;
+
+    h2 {
+        color: #00796b;
+        font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    h3 {
+        color: #004d40;
+        font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    /* Input box styling */
+    .stTextInput, .stNumberInput, .stSelectbox {
+        font-size: 18px;
+        border: 2px solid #00796b;
+        border-radius: 10px;
+    }
+
+    /* Button styling and hover effect */
+    .stButton button {
+        background-color: #004d40;
         color: white;
+        font-size: 18px;
+        border-radius: 10px;
+        padding: 10px 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    .stButton button:hover {
+        background-color: #00796b;
+        color: white;
+    }
+
+    /* File uploader styling */
+    .stFileUploader {
+        border: 2px solid #00796b;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    /* Animation for headers */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    h1, h2, h3 {
+        animation: fadeIn 1.5s ease-in-out;
+    }
+
+    /* Animation for buttons */
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-20px); }
+        60% { transform: translateY(-10px); }
+    }
+
+    .stButton button {
+        animation: bounce 2s infinite;
     }
     </style>
     """,
@@ -28,8 +86,8 @@ st.markdown(
 )
 
 # Page title and description
-st.title("Enhanced Streamlit App")
-st.subheader("An improved UI with better layout and styling")
+st.title("Enhanced Streamlit App with Colors & Animations")
+st.subheader("An improved UI with custom colors, animations, and better layout")
 
 # Creating columns for better layout
 col1, col2 = st.columns(2)
