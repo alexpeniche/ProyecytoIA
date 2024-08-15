@@ -22,7 +22,7 @@ filtered_df = df.copy()
 
 for column in columns:
     unique_values = filtered_df[column].unique()
-    selected_values = st.sidebar.multiselect(f"Filter by {column}:", options=unique_values, default=unique_values)
+    selected_values = st.sidebar.multiselect(f"Filter by {column}:", options=unique_values)
     filtered_df = filtered_df[filtered_df[column].isin(selected_values)]
 
 # Data editor
