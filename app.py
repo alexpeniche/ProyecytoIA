@@ -32,10 +32,15 @@ with tab1:
     columns = st.sidebar.multiselect("Select columns to filter by:", options=df.columns)
     filtered_df = df.copy()
 
+    
     for column in columns:
         unique_values = filtered_df[column].unique()
         selected_values = st.sidebar.multiselect(f"Filter by {column}:", options=unique_values)
         filtered_df = filtered_df[filtered_df[column].isin(selected_values)]
+    
+    st.subheader("Conteo de Registros y Suma de un Campo Numérico")
+    record_count = filtered_df.shape[0]
+    st.write(f"Total de registros: {record_count}")
 
     st.write("Filtered Data Preview:")
     st.dataframe(filtered_df, use_container_width=True)
